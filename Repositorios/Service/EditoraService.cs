@@ -77,9 +77,34 @@ namespace QuadrinhosAPI.Repositorios.Service
             return response;
         }
 
-        public Task<ResponseModel<List<EditoraModel>>> putEditora()
+        public async  Task<ResponseModel<List<EditoraModel>>> putEditora(EditoraEdicaoDto editoraEdicaoDto)
         {
-            throw new NotImplementedException();
+            var response = new ResponseModel<List<EditoraModel>>();
+            try
+            {
+                var editoraEdicao = await _context.Editora
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(a => a.Id == editoraEdicaoDto.Id);
+                var editora = new EditoraModel();
+                {
+                    editora.Id = editoraEdicaoDto.Id;
+                    editora.Name = editoraEdicaoDto.Name;
+                }
+
+                _context.Editora.Update(editora);
+                await _context.SaveChangesAsync();
+
+                response.Dados = await  _context.Editora.ToListAsync();
+                response.Mensagem = "Deu certo!";
+            }
+            catch (Exception ex)
+            {
+
+                response.Mensagem = "Deu muito errado " + ex.Message;
+                response.Status = false;
+                return response;
+            }
+            return response;
         }
     }
 }

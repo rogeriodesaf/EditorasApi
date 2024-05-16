@@ -35,7 +35,16 @@ namespace QuadrinhosAPI.Controllers
             }
             return Ok(editora);
         }
-
+        [HttpPut("v1/put")]
+        public async Task<ActionResult<List<EditoraModel>>> putEditora(EditoraEdicaoDto editoraEdicaoDto)
+        {
+            var editora = await _editoraInterface.putEditora(editoraEdicaoDto);
+            if(editora is null)
+            {
+                return NotFound(editora.Mensagem);
+            }
+            return Ok(editora);
+        }
     }
 
 }
