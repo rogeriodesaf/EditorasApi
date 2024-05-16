@@ -25,5 +25,17 @@ namespace QuadrinhosAPI.Controllers
             }
             return Ok(editora);
         }
+        [HttpGet("v1/get")]
+        public async Task<ActionResult<List<EditoraModel>>> getEditora()
+        {
+            var editora = await _editoraInterface.getEditora();
+            if(editora is null)
+            {
+                return NotFound(editora.Mensagem);
+            }
+            return Ok(editora);
+        }
+
     }
+
 }

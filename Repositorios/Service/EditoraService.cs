@@ -19,9 +19,30 @@ namespace QuadrinhosAPI.Repositorios.Service
             throw new NotImplementedException();
         }
 
-        public Task<ResponseModel<List<EditoraModel>>> getEditora()
+        public async Task<ResponseModel<List<EditoraModel>>> getEditora()
         {
-            throw new NotImplementedException();
+            var response = new ResponseModel<List<EditoraModel>>();
+            try
+            {
+                var editora = await _context.Editora.ToListAsync();
+                if(editora is null)
+                {
+                    response.Mensagem = "Deu errado";
+                    response.Status = false;
+                    return response;
+                }
+
+                response.Dados = await _context.Editora.ToListAsync();
+                response.Mensagem = "Deu certo!";
+            }
+            catch (Exception ex)
+            {
+
+                response.Mensagem = "Deu muito errado" + ex.Message;
+                response.Status = false;
+                return response;
+            }
+            return response;
         }
 
         public async Task<ResponseModel<List<EditoraModel>>> postEditora(EditoraCriacaoDto editoraCriacaoDto)
