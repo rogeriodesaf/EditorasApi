@@ -12,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IEditoraInterface, EditoraService>();  
+builder.Services.AddScoped<ITituloInterface, TituloService>();
 
 
 

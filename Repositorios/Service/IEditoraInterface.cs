@@ -10,5 +10,6 @@ namespace QuadrinhosAPI.Repositorios.Service
         public  Task<ResponseModel<List<EditoraModel>>> postEditora(EditoraCriacaoDto editoraCriacaoDto);
         public  Task<ResponseModel<List<EditoraModel>>> putEditora(EditoraEdicaoDto editoraEdicaoDto);
         public  Task<ResponseModel<List<EditoraModel>>> deleteEditora(int id);
+        public Task<ResponseModel<EditoraModel>> getEditoraById( int id);
     }
 }

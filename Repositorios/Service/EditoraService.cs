@@ -14,9 +14,30 @@ namespace QuadrinhosAPI.Repositorios.Service
             _context = context;
         }
 
-        public Task<ResponseModel<List<EditoraModel>>> deleteEditora(int id)
+        public async Task<ResponseModel<List<EditoraModel>>> deleteEditora(int id)
         {
-            throw new NotImplementedException();
+            var response = new ResponseModel<List<EditoraModel>>();
+            try
+            {
+                var editora = await _context.Editora
+                    .FirstOrDefaultAsync(a => a.Id == id);  
+                if(editora != null)
+                {
+                    _context.Editora.Remove(editora);
+                    await _context.SaveChangesAsync();
+                }
+
+                response.Dados = await _context.Editora.ToListAsync();
+                response.Mensagem = "Deu certo!";
+            }
+            catch (Exception ex)
+            {
+
+                response.Mensagem = "Deu muito errado " + ex.Message;
+                response.Status = false;
+                return response;
+            }
+            return response;
         }
 
         public async Task<ResponseModel<List<EditoraModel>>> getEditora()
@@ -39,6 +60,36 @@ namespace QuadrinhosAPI.Repositorios.Service
             {
 
                 response.Mensagem = "Deu muito errado" + ex.Message;
+                response.Status = false;
+                return response;
+            }
+            return response;
+        }
+
+        public async Task<ResponseModel<EditoraModel>> getEditoraById(int id)
+        {
+           ResponseModel<EditoraModel> response = new ResponseModel<EditoraModel>();
+
+            try
+            {
+                var editora = await _context.Editora
+                    .Include(a => a.Titulos)
+                    .FirstOrDefaultAsync(b => b.Id == id);
+                if(editora is null)
+                {
+                    response.Mensagem = "Editora não encontrada";
+                    response.Status=false;
+                    return response;
+                }
+
+                response.Dados = editora;
+                response.Mensagem = "Dados retornados com sucesso!";
+                
+            }
+            catch (Exception ex)
+            {
+
+                response.Mensagem = ex.Message ;
                 response.Status = false;
                 return response;
             }
